@@ -1,9 +1,9 @@
 # hyperf postgresdb pool
 
 ```
-composer require gioco-plus/hyperf-postgresdb
+composer require gioco-plus/hyperf-postgres
 
-php bin/hyperf.php vendor:publish "gioco-plus/hyperf-postgresdb" 
+php bin/hyperf.php vendor:publish "gioco-plus/hyperf-postgres" 
 ```
 
 # 動態切換連結池
@@ -19,15 +19,15 @@ php bin/hyperf.php vendor:publish "gioco-plus/hyperf-postgresdb"
      * @Inject()
      * @var PostgreSQL
      */
-    protected $mongoDbClient;
+    protected $postgresClient;
 
 
     
     # 使用方式
-    $config =  mongodb_pool_config('192.168.30.xx', 'ezadmin_yb', 27017, 'beta-db'); # 建立連結資訊
-    $this->config->set("postgresdb.dbYB", $config); # 前綴 "postgresdb."
+    $config =  postgres_pool_config('192.168.30.xx', 'ezadmin_yb', 5432, 'gf_db'); # 建立連結資訊
+    $this->config->set("postgres.dbYB", $config); # 前綴 "postgresdb."
 
-    $this->mongoDbClient->setPool("dbYB")->insert("hyperf_test", [
+    $this->postgresClient->setPool("dbYB")->insert("hyperf_test", [
         'aaa'=>'a',
         'bbb'=>'b',
         'ccc'=>'c'
@@ -36,175 +36,24 @@ php bin/hyperf.php vendor:publish "gioco-plus/hyperf-postgresdb"
 ```
 
 ## config 
-在/config/autoload目录里面创建文件 postgresdb.php
+在/config/autoload目录里面创建文件 postgres.php
 添加以下内容
 ```php
 return [
     'default' => [
-        'username' => env('MONGODB_USERNAME', ''),
-        'password' => env('MONGODB_PASSWORD', ''),
-        'host' => explode(';', env('MONGODB_HOST', '127.0.0.1')),
-        'port' => env('MONGODB_PORT', 27017),
-        'db' => env('MONGODB_DB', 'test'),
-        'options'  => [
-            'database' => 'admin',
-            // 需要配置 username
-            // 'authMechanism' => env('MONGODB_AuthMechanism', 'SCRAM-SHA-256'), 
-            //设置复制集,没有不设置
-            'replica' => env('MONGODB_Replica', 'rs0'),
-            'readPreference' => env('MONGODB_ReadPreference', 'primary'),
-        ],
+        'username' => env('POSTGRES_USERNAME', ''),
+        'password' => env('POSTGRES_PASSWORD', ''),
+        'host' => env('POSTGRES_HOST', '127.0.0.1'),
+        'port' => env('POSTGRES_PORT', 5432),
+        'db' => env('POSTGRES_DB', 'test'),
         'pool' => [
             'min_connections' => 1,
             'max_connections' => 100,
             'connect_timeout' => 10.0,
             'wait_timeout' => 3.0,
             'heartbeat' => -1,
-            'max_idle_time' => (float)env('MONGODB_MAX_IDLE_TIME', 60),
+            'max_idle_time' => (float)env('POSTGRES_MAX_IDLE_TIME', 60),
         ],
     ],
 ];
-```
-
-
-# 使用案例
-
-使用注解，自动加载 
-**\GiocoPlus\Postgres\PostgreSQL** 
-```php
-/**
- * @Inject()
- * @var PostgreSQL
-*/
- protected $mongoDbClient;
-```
-
-#### **tips:** 
-查询的值，是严格区分类型，string、int类型的哦
-
-### 新增
-
-单个添加
-```php
-$insert = [
-            'account' => '',
-            'password' => ''
-];
-$this->mongoDbClient->insert('fans',$insert);
-```
-
-批量添加
-```php
-$insert = [
-            [
-                'account' => '',
-                'password' => ''
-            ],
-            [
-                'account' => '',
-                'password' => ''
-            ]
-];
-$this->mongoDbClient->insertAll('fans',$insert);
-```
-
-### 查询
-
-```php
-$where = ['account'=>'1112313423'];
-$result = $this->mongoDbClient->fetchAll('fans', $where);
-```
-
-```php
-$result = $this->mongoDbClient->fetchAll('fans',
-            [
-                'id' => [
-                    '$in' => ['a', 'b', 'c']
-                ]
-            ], [
-                'sort' => ['sort'=>1]
-            ]
-        );
-# $or 的使用方式
-$inputs['filter']['$or'] = [
-    [
-        '_id' => [
-            '$in' => $bull_ids
-        ]
-    ],
-    [
-        'for_all' => [
-            '$eq' => true
-        ]
-    ]
-];
-$result = $this->mongoDbClient->fetchAll('fans', $inputs['filter']);
-```
-
-### 分页查询
-```php
-$list = $this->mongoDbClient->fetchPagination('article', 10, 0, ['author' => $author]);
-```
-
-### 更新
-```php
-$where = ['account'=>'1112313423'];
-$updateData = [];
-
-$this->mongoDbClient->updateColumn('fans', $where,$updateData); // 只更新数据满足$where的行的列信息中在$newObject中出现过的字段
-$this->mongoDbClient->updateRow('fans',$where,$updateData);// 更新数据满足$where的行的信息成$newObject
-```
-### 删除
-
-```php
-$where = ['account'=>'1112313423'];
-$all = true; // 为false只删除匹配的一条，true删除多条
-$this->mongoDbClient->delete('fans',$where,$all);
-```
-
-### count统计
-
-```php
-$filter = ['isGroup' => "0", 'wechat' => '15584044700'];
-$count = $this->mongoDbClient->count('fans', $filter);
-```
-
-
-
-### Command，执行更复杂的mongo命令
-
-**sql** 和 **postgresdb** 关系对比图
-
-|   SQL  | PostgreSQL |
-| --- | --- |
-|   WHERE  |  $match (match里面可以用and，or，以及逻辑判断，但是好像不能用where)  |
-|   GROUP BY  | $group  |
-|   HAVING  |  $match |
-|   SELECT  |  $project  |
-|   ORDER BY  |  $sort |
-|   LIMIT  |  $limit |
-|   SUM()  |  $sum |
-|   COUNT()  |  $sum |
-
-```php
-
-$pipeline= [
-            [
-                '$match' => $where
-            ], [
-                '$group' => [
-                    '_id' => [],
-                    'groupCount' => [
-                        '$sum' => '$groupCount'
-                    ]
-                ]
-            ], [
-                '$project' => [
-                    'groupCount' => '$groupCount',
-                    '_id' => 0
-                ]
-            ]
-];
-
-$count = $this->mongoDbClient->command('fans', $pipeline);
 ```
