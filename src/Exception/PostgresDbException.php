@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace GiocoPlus\Postgres\Exception;
 
-class PostgresException extends \Exception
+class PostgresDbException extends \Exception
 {
     /**
      * @param string $msg
-     * @throws PostgresException
+     * @throws PostgresDbException
      */
     public static function managerError(string $msg)
     {

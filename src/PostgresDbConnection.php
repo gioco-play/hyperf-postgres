@@ -14,7 +14,7 @@ use Swoole\Coroutine\PostgreSQL;
 class PostgresDbConnection extends Connection implements ConnectionInterface
 {
     /**
-     * @var Manager
+     * @var PostgreSQL
      */
     protected $connection;
 
