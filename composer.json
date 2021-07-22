@@ -1,0 +1,29 @@
+{
+  "name": "gioco-plus/hyperf-postgres",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Xuan.Yang",
+      "email": "yang5664@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "psr/container": "^1.0",
+    "hyperf/pool": "^2.0",
+    "hyperf/utils": "^2.0.0"
+  },
+  "autoload": {
+    "files": [
+      "./src/Functions.php"
+    ],
+    "psr-4": {
+      "GiocoPlus\\PostgreSQL\\": "src/"
+    }
+  },
+  "extra": {
+    "hyperf": {
+      "config": "GiocoPlus\\PostgreSQL\\ConfigProvider"
+    }
+  }
+}
