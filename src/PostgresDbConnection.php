@@ -35,7 +35,7 @@ class PostgresDbConnection extends Connection implements ConnectionInterface
         if (!$this->reconnect()) {
             throw new ConnectionException('Connection reconnect failed.');
         }
-        return $this;
+        return $this->connection;
     }
 
     /**
