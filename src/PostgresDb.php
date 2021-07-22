@@ -7,10 +7,10 @@ use Hyperf\Utils\Context;
 use Swoole\Coroutine\PostgreSQL;
 
 /**
- * Class PostgreDb
- * @package GiocoPlus\PostgreDb
+ * Class PostgresDb
+ * @package GiocoPlus\PostgresDb
  */
-class PostgreDb
+class PostgresDb
 {
     /**
      * @var PoolFactory
@@ -33,7 +33,7 @@ class PostgreDb
      * @param string $poolName
      * @return $this
      */
-    public function setPool(string $poolName): PostgreDb {
+    public function setPool(string $poolName): PostgresDb {
         $this->poolName = $poolName;
         return $this;
     }
