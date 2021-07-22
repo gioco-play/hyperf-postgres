@@ -8,18 +8,18 @@ use  GiocoPlus\Postgres\Exception\InvalidPostgresDbConnectionException;
 class PostgresDbConfiguration
 {
     /**
-     * @return array
+     * @return string
      */
-    public function getHost(): array
+    public function getHost(): string
     {
         return $this->host;
     }
 
     /**
-     * @param array $host
+     * @param string $host
      * @return PostgresDbConfiguration
      */
-    public function setHost(array $host): PostgresDbConfiguration
+    public function setHost(string $host): PostgresDbConfiguration
     {
         $this->host = $host;
         return $this;
@@ -116,7 +116,7 @@ class PostgresDbConfiguration
     }
 
     /**
-     * @var array
+     * @var string
      */
     private $host;
 
