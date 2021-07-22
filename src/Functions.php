@@ -27,7 +27,7 @@ if (!function_exists('postgres_pool_config')) {
             'password' => $password,
             'host' => $host,
             'port' => $port,
-            'db' => $dbName,
+            'database' => $dbName,
             'pool' => [
                 'min_connections' => 1,
                 'max_connections' => $maxConn,

@@ -45,7 +45,7 @@ return [
         'password' => env('POSTGRES_PASSWORD', ''),
         'host' => env('POSTGRES_HOST', '127.0.0.1'),
         'port' => env('POSTGRES_PORT', 5432),
-        'db' => env('POSTGRES_DB', 'test'),
+        'database' => env('POSTGRES_DB', 'test'),
         'pool' => [
             'min_connections' => 1,
             'max_connections' => 100,
