@@ -18,12 +18,12 @@
       "./src/Functions.php"
     ],
     "psr-4": {
-      "GiocoPlus\\PostgreSQL\\": "src/"
+      "GiocoPlus\\Postgres\\": "src/"
     }
   },
   "extra": {
     "hyperf": {
-      "config": "GiocoPlus\\PostgreSQL\\ConfigProvider"
+      "config": "GiocoPlus\\Postgres\\ConfigProvider"
     }
   }
 }
