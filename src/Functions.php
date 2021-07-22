@@ -19,7 +19,7 @@ if (!function_exists('postgres_pool_config')) {
        * @return array
        */
     function postgres_pool_config(string $host, string $dbName, int $port = 5432,
-        string $username = '', string $password = '',
+        string $username, string $password,
         int $maxConn = 100, float $connTimeout = 10, float $maxIdleTime = 60 ): array {
 
         return [
