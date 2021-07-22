@@ -4,7 +4,7 @@ namespace GiocoPlus\Postgres\Pool;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ConnectionInterface;
-use GiocoPlus\Postgres\MongoDbConnection;
+use GiocoPlus\Postgres\PostgresDbConnection;
 use Hyperf\Pool\Pool;
 use Hyperf\Utils\Arr;
 use Psr\Container\ContainerInterface;
@@ -46,6 +46,6 @@ class PostgresDBPool extends Pool
 
     protected function createConnection(): ConnectionInterface
     {
-        return new MongoDbConnection($this->container, $this, $this->config);
+        return new PostgresDbConnection($this->container, $this, $this->config);
     }
 }
