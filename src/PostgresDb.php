@@ -2,7 +2,9 @@
 
 namespace GiocoPlus\Postgres;
 
+use GiocoPlus\Postgres\Exception\PostgresDbException;
 use GiocoPlus\Postgres\Pool\PoolFactory;
+use GiocoPlus\Postgres\Pool\PostgresDBPool;
 use Hyperf\Utils\Context;
 use Swoole\Coroutine\PostgreSQL;
 
@@ -39,11 +41,53 @@ class PostgresDb
     }
 
     /**
+     * @param string $sql
+     * @return mixed
+     * @throws PostgresDbException
+     */
+    public function query(string $sql) {
+        try {
+            $collection = $this->getConnection();
+            return $collection->query($sql);
+        } catch (\Exception $e) {
+            throw new PostgresDbException($e->getFile() . $e->getLine() . $e->getMessage());
+        }
+    }
+
+    /**
+     * @param mixed $sql
+     * @return mixed
+     * @throws PostgresDbException
+     */
+    public function fetchAll($sql) {
+        try {
+            $collection = $this->getConnection();
+            return $collection->fetchAll($sql);
+        } catch (\Exception $e) {
+            throw new PostgresDbException($e->getFile() . $e->getLine() . $e->getMessage());
+        }
+    }
+
+    /**
+     * @param mixed $sql
+     * @return mixed
+     * @throws PostgresDbException
+     */
+    public function fetchRow($sql) {
+        try {
+            $collection = $this->getConnection();
+            return $collection->fetchRow($sql);
+        } catch (\Exception $e) {
+            throw new PostgresDbException($e->getFile() . $e->getLine() . $e->getMessage());
+        }
+    }
+
+    /**
      * PostgreSQL
      *
-     * @return PostgreSQL
+     * @return PostgresDbConnection
      */
-    public function connect()
+    public function getConnection()
     {
         $connection = null;
         $hasContextConnection = Context::has($this->getContextKey());
